@@ -1,0 +1,23 @@
+{
+  "minecraftVersion": "26.3",
+  "loader": "vanilla",
+  "loaderVersion": "",
+  "ramMin": 1024,
+  "ramMax": 4096,
+  "performancePreset": "balanced",
+  "hud": {
+    "fps": true,
+    "ping": true,
+    "coordinates": true,
+    "direction": true,
+    "keystrokes": true,
+    "cps": true,
+    "armor": true,
+    "potions": true,
+    "target": true,
+    "sprint": true,
+    "crosshair": true,
+    "durability": true,
+    "itemCount": true
+  }
+}

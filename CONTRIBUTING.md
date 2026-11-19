@@ -1,0 +1,3 @@
+# Contributing
+
+Use the public source repository. Open an issue for planned changes; submit a pull request against main with a clear description, test evidence and any dependency/license/privacy changes. Do not include secrets, downloaded games, account records, test credentials or generated EXEs. Use Node.js 24 for CI; run `npm ci`, `npm run check` and `npm test`. Changes to build, auth, downloads, updater, and signing require explicit maintainer review. Do not submit patches to bypass licensing or authentication controls. Signed release authorization remains with the confirmed release approver. Contributions are subject to the project's MIT license and applicable third-party licenses.

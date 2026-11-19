@@ -1,0 +1,16 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const [repository, branch = 'main'] = process.argv.slice(2);
+if (!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(repository || '') || repository.split('/').some(x => ['.', '..'].includes(x))) throw new Error('Usage: npm run configure:release -- OWNER/REPO [branch]');
+if (!/^[A-Za-z0-9_.\/-]+$/.test(branch) || branch.includes('..')) throw new Error('Invalid branch name.');
+const [owner, repo] = repository.split('/');
+const configFile = path.join(root, 'electron-builder.nsis.yml');
+const config = (await fs.readFile(configFile, 'utf8')).split('# CRYON RELEASE PROVIDER (generated)')[0].trimEnd();
+await fs.writeFile(configFile, `${config}\n# CRYON RELEASE PROVIDER (generated)\npublish:\n  provider: github\n  owner: '${owner}'\n  repo: '${repo}'\n  private: false\n`);
+await fs.writeFile(path.join(root, 'configs/update-source.json'), JSON.stringify({ repository }, null, 2) + '\n');
+const partnerFile = path.join(root, 'configs/partner-source.json');
+const partner = JSON.parse(await fs.readFile(partnerFile, 'utf8'));
+if (!partner.url) await fs.writeFile(partnerFile, JSON.stringify({ url: `https://raw.githubusercontent.com/${repository}/${branch}/partner-feed/partners.json` }, null, 2) + '\n');
+console.log(`Configured release feed: ${repository}; existing nonempty partner URL preserved.`);

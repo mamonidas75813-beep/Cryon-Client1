@@ -1,0 +1,81 @@
+name: Windows Release (legacy certificate, opt-in)
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_legacy_release:
+        description: 'Use existing PFX release pipeline (not SignPath)'
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: windows-release
+  cancel-in-progress: false
+jobs:
+  build-windows:
+    if: inputs.confirm_legacy_release && startsWith(github.ref, 'refs/tags/v')
+    runs-on: windows-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Configure GitHub feeds
+        env:
+          RELEASE_REPO: mamonidas75813-beep/CRYON-RELEASES
+          DEFAULT_BRANCH: main
+        run: node scripts/configure-release.js "$env:RELEASE_REPO" "$env:DEFAULT_BRANCH"
+      - name: Validate version tag
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          $version = node -p "require('./package.json').version"
+          if ($env:GITHUB_REF_NAME -ne "v$version" -or $version -notmatch '^\d+\.\d+\.\d+$') { throw 'Tag must match the stable package.json version.' }
+      - name: Build, test and verify Windows packages
+        env:
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:CSC_LINK)) { throw 'Configure CSC_LINK in GitHub Actions secrets.' }
+          npm run build:windows
+          if ($LASTEXITCODE -ne 0) { throw 'Build failed.' }
+      - name: Verify Authenticode signatures
+        run: |
+          $version = node -p "require('./package.json').version"
+          foreach ($file in @("build-output/installer/CRYON-CLIENT-Setup-$version.exe", 'release/CRYON CLIENT Portable.exe')) {
+            $sig = Get-AuthenticodeSignature -FilePath $file
+            if ($sig.Status -ne 'Valid') { throw "Signature verification failed for $file : $($sig.Status)" }
+            Write-Host "Verified signer: $($sig.SignerCertificate.Subject)"
+          }
+      - name: Verify update assets
+        run: |
+          $version = node -p "require('./package.json').version"
+          $base = "build-output/installer/CRYON-CLIENT-Setup-$version.exe"
+          foreach ($file in @($base, "$base.blockmap", 'build-output/installer/latest.yml')) { if (!(Test-Path $file)) { throw "Missing $file" } }
+          $meta = Get-Content 'build-output/installer/latest.yml' -Raw
+          if (!$meta.Contains("CRYON-CLIENT-Setup-$version.exe") -or !$meta.Contains('sha512:')) { throw 'Invalid update metadata' }
+      - name: Upload release folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: cryon-client-windows-x64
+          path: |
+            release/*
+            build-output/installer/latest.yml
+            build-output/installer/CRYON-CLIENT-Setup-*.exe
+            build-output/installer/CRYON-CLIENT-Setup-*.exe.blockmap
+          if-no-files-found: error
+          retention-days: 30
+      - name: Publish stable release atomically
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          RELEASE_REPO: mamonidas75813-beep/CRYON-RELEASES
+        run: |
+          $version = node -p "require('./package.json').version"
+          $tag = "v$version"
+          if ($version -notmatch '^\d+\.\d+\.\d+$') { throw 'Stable version required' }
+          if ([string]::IsNullOrWhiteSpace($env:GH_TOKEN)) { throw 'Configure RELEASE_TOKEN' }
+          $base = "build-output/installer/CRYON-CLIENT-Setup-$version.exe"
+          gh release create $tag $base "$base.blockmap" 'build-output/installer/latest.yml' 'release/CRYON CLIENT Portable.exe' --repo $env:RELEASE_REPO --draft --title "CRYON CLIENT $version" --notes "CRYON CLIENT $version"
+          if ($LASTEXITCODE -ne 0) { throw 'Draft release creation/upload failed. Check Releases before retrying.' }
+          gh release edit $tag --repo $env:RELEASE_REPO --draft=false --latest
+          if ($LASTEXITCODE -ne 0) { throw 'Release publication failed.' }

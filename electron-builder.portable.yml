@@ -1,0 +1,29 @@
+appId: com.cryonclient.launcher
+productName: CRYON CLIENT
+asar: true
+npmRebuild: false
+directories:
+  output: build-output/portable
+files:
+  - src/**/*
+  - modules/**/*
+  - configs/**/*
+  - assets/**/*
+  - package.json
+  - '!tests/**'
+  - '!scripts/**'
+  - '!modules/mods/nova-hud-fabric/**'
+  - '!modules/**/README.md'
+  - '!README.md'
+  - '!BUILD_STATUS.md'
+  - '!TEST_REPORT.md'
+extraMetadata:
+  main: src/main.js
+win:
+  target:
+    - target: portable
+      arch: [x64]
+  icon: assets/icon.ico
+portable:
+  artifactName: CRYON CLIENT Portable.${ext}
+artifactName: CRYON CLIENT Portable.${ext}

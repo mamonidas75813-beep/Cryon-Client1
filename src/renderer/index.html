@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; form-action 'none'; img-src 'self' data: https:; style-src 'self'; script-src 'self'; connect-src 'self' https://api.modrinth.com https://cdn.modrinth.com https://launchermeta.mojang.com https://piston-meta.mojang.com https://libraries.minecraft.net https://resources.download.minecraft.net;">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090b14">
+  <title>CRYON CLIENT</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="classy-theme.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand-lockup"><img class="brand-image" src="../../assets/logo.png" alt="CRYON logo"><div><div class="brand-name">CRYON</div><div class="brand-sub">CLIENT</div></div></div>
+      <div class="nav-label">WORKSPACE</div>
+      <nav class="nav-list" aria-label="Main navigation">
+        <button class="nav-item active" data-page="home"><span class="nav-icon nav-icon-home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 10.5 12 3.8l8.5 6.7M6.2 9.7V20h11.6V9.7M9.2 20v-6h5.6v6"/></svg></span>Overview</button>
+        <button class="nav-item" data-page="profiles"><span class="nav-icon nav-icon-profiles"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3.5" width="16" height="17" rx="2.4"/><path d="M8 8h8M8 12h8M8 16h4"/></svg></span>Profiles</button>
+        <button class="nav-item" data-page="accounts"><span class="nav-icon nav-icon-accounts"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c.6-3.2 3.1-5.1 7-5.1s6.4 1.9 7 5.1M18.2 5.2a3 3 0 0 1 0 5.6M20.5 16.1c1.1.8 1.7 2 1.9 3.9"/></svg></span>Accounts</button>
+        <button class="nav-item" data-page="partners"><span class="nav-icon nav-icon-partners"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8.7 12.6 2.1 2.1a2.6 2.6 0 0 0 3.7 0l3.9-3.9a2.6 2.6 0 0 0-3.7-3.7l-1.1 1.1M15.3 11.4l-2.1-2.1a2.6 2.6 0 0 0-3.7 0l-3.9 3.9a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/><path d="M3.5 8.5 6 6l2 1M20.5 15.5 18 18l-2-1"/></svg></span>Partners</button>
+        <button class="nav-item" data-page="mods"><span class="nav-icon nav-icon-mods"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4.6v8.8L12 21l-8-4.6V7.6L12 3Z"/><path d="m4.5 7.8 7.5 4.4 7.5-4.4M12 12.2V21M8 5.3l8 4.6"/></svg></span>Mods & Packs</button>
+        <button class="nav-item" data-page="servers"><span class="nav-icon nav-icon-servers"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4" width="17" height="6" rx="1.8"/><rect x="3.5" y="14" width="17" height="6" rx="1.8"/><path d="M7 7h.1M10 7h5M7 17h.1M10 17h5"/></svg></span>Create Server</button>
+      </nav>
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-status"><span class="status-dot"></span><span>Launcher system ready</span></div>
+      <button class="nav-item" data-page="settings"><span class="nav-icon nav-icon-settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2 14 4l1.5-.6 1.6 1.6-.6 1.5.8 2 1.5.7v2.3l-1.5.7-.8 2 .6 1.5-1.6 1.6-1.5-.6-2 .8-.7 1.5h-2.3l-.7-1.5-2-.8-1.5.6-1.6-1.6.6-1.5-.8-2-1.5-.7V9.2l1.5-.7.8-2-.6-1.5 1.6-1.6 1.5.6 2-.8.7-1.5h2.3Z"/><circle cx="11.9" cy="10.5" r="2.8"/></svg></span>Settings</button>
+      <div class="sidebar-footer">CRYON CLIENT <span id="app-version">v0.11.7</span><br><span class="muted">Independent community project</span></div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div><div class="eyebrow">MINECRAFT JAVA EDITION</div><div class="topbar-title" id="page-title">Overview</div></div>
+        <div class="top-actions"><button class="small-ghost" id="launcher-update-banner" hidden>Restart to update</button><span class="build-pill"><span class="status-dot"></span>Stable channel</span><div class="account-chip"><div class="avatar" id="account-avatar">N</div><div><div class="account-name" id="account-name">Not signed in</div><div class="account-sub" id="account-sub">Microsoft account</div></div><button class="small-ghost" id="account-action">Sign in</button></div></div>
+      </header>
+
+      <section class="page active" id="page-home">
+        <div class="home-layout">
+          <div class="home-main">
+            <section class="hero-card hero-photo">
+              <div class="hero-shade"></div>
+              <div class="home-player-name" id="home-player-name">CRYON PLAYER</div>
+              <div class="home-launch-wrap">
+                <div class="home-profile-pill"><span class="live-dot"></span><span id="home-profile-label">Cryon Standard · Minecraft 26.3</span></div>
+                <div class="home-launch-row">
+                  <button class="button button-primary home-launch-button" id="play-button"><span class="play-symbol">▶</span><span id="play-label">LAUNCH GAME</span><small id="play-subtitle">Manage mods &amp; packs</small></button>
+                  <button class="home-profile-menu" id="home-profile-menu" aria-label="Choose profile">⌄</button>
+                </div>
+                <div class="home-profile-shortcuts" id="home-profile-shortcuts" hidden></div>
+                <button class="home-mods-quick" id="home-mods-quick" data-page="mods" hidden>Manage mods &amp; packs ↗</button>
+              </div>
+            </section>
+            <div class="home-lower-grid">
+              <section class="home-news">
+                <div class="home-section-title"><span>LATEST FROM CRYON</span><button class="small-ghost" data-page="mods">Browse Modrinth ↗</button></div>
+                <div class="news-card-grid">
+                  <button class="news-card news-card-mods" data-page="mods"><span class="news-card-kicker">MODRINTH</span><b>Mods & packs</b><small>Mods · Modpacks · Resource packs</small></button>
+                  <button class="news-card news-card-profiles" data-page="profiles"><span class="news-card-kicker">YOUR SETUPS</span><b>Separate profiles</b><small>Keep each version and its files isolated</small></button>
+                </div>
+              </section>
+              <section class="panel home-friends"><div class="home-section-title"><span>YOUR CRYON SPACE</span></div><div class="friends-empty"><div class="friends-icon">♧</div><b>Play your way.</b><p>Assign accounts to profiles, keep different mod lists, and switch versions without mixing files.</p><button class="small-ghost" data-page="accounts">Manage accounts</button></div></section>
+            </div>
+            <div class="progress-wrap home-progress" id="launch-progress" hidden><div class="progress-info"><span id="progress-label">Preparing launch…</span><span id="progress-percent">—</span></div><div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div><pre class="launch-log" id="launch-log"></pre></div>
+            <div class="home-system-line"><span>Launcher <b id="engine-status">Ready</b></span><span>Java <b id="home-java">Auto</b></span><span>Active profile <b id="home-version">26.3</b></span><button class="text-button" id="open-logs">Open logs ↗</button></div>
+          </div>
+          <aside class="home-rail" aria-label="Featured partner servers">
+            <section class="rail-partner-panel">
+              <div class="rail-partner-heading"><div><div class="eyebrow">FEATURED NETWORK</div><b>Partner Servers</b></div><span class="partner-star-mark">★</span></div>
+              <div class="partner-server-list" id="partner-server-list"></div>
+            </section>
+          </aside>
+          <div class="legacy-home-rail-state" hidden aria-hidden="true"><span id="rail-profile-name"></span><span id="rail-profile-sub"></span><span id="home-mods">0</span></div>
+        </div>
+      </section>
+
+      <section class="page" id="page-partners">
+        <div class="partner-directory-heading">
+          <div><div class="eyebrow">COMMUNITY NETWORKS / MULTIPLAYER</div><h1>Partner Servers</h1><p>Discover featured Minecraft communities or keep your own servers one click away.</p></div>
+        </div>
+        <div class="partner-directory-toolbar">
+          <label class="partner-directory-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><input id="partner-directory-search" type="search" placeholder="Search partners…" autocomplete="off"></label>
+          <a class="partner-become-button" href="https://github.com/mamonidas75813-beep/Cryon-Client/issues/new?title=Partner%20server%20request&body=Server%20name%3A%20%0AServer%20address%3A%20%0AWebsite%3A%20%0ADescription%3A%20" target="_blank" rel="noreferrer">↗ <span>Become a Partner</span></a>
+          <button class="partner-sort-button" id="partner-sort-toggle" type="button" data-sort="live">● <span>Live ranking</span></button>
+        </div>
+        <div class="partner-directory-tabs" role="tablist" aria-label="Server categories">
+          <button class="partner-directory-tab active" type="button" data-partner-tab="partners">★ Partners</button>
+          <button class="partner-directory-tab" type="button" data-partner-tab="community">Your Servers</button>
+          <span class="partner-directory-count" id="partner-directory-count">Loading servers…</span>
+          <button class="partner-add-toggle" id="partner-add-toggle" type="button" hidden>＋ Add your server</button>
+        </div>
+        <div class="partner-manager-bar" id="partner-manager-bar">
+          <div><b>Official global partners</b><small id="partner-sync-status">Checking for updates…</small></div>
+          <button class="small-ghost" id="partner-refresh" type="button">↻ Refresh</button>
+        </div>
+        <p id="partner-config-error" class="partner-config-error" role="alert" hidden></p>
+        <div class="partner-launch-context"><label for="partner-launch-profile">JOIN USING PROFILE</label><select id="partner-launch-profile" aria-label="Minecraft profile to use when joining a server"></select><small>The selected Minecraft profile will be used for the direct server connection.</small></div>
+        <form class="community-server-form partner-directory-form" id="community-server-form" hidden>
+          <label><span>SERVER NAME</span><input id="community-server-name" maxlength="32" required placeholder="My Minecraft server"></label>
+          <label><span>SERVER ADDRESS</span><input id="community-server-address" maxlength="253" required placeholder="play.example.net:25565"></label>
+          <div class="community-form-actions"><button type="button" class="small-ghost" id="community-server-cancel">Cancel</button><button type="submit" class="button button-primary" id="community-server-save">Add server</button></div>
+        </form>
+        <div class="partner-directory-grid" id="partner-directory-grid"><div class="partner-directory-loading">Loading server network…</div></div>
+      </section>
+
+      <div class="legacy-profile-controls" hidden aria-hidden="true">
+        <select id="active-profile-select"></select><select id="version-select"></select><select id="loader-select"><option value="vanilla">Vanilla</option><option value="fabric">Fabric</option><option value="forge">Forge</option><option value="neoforge">NeoForge</option><option value="quilt">Quilt</option></select><input id="loader-version" type="text"><button id="resolve-home-loader" type="button">Auto</button><span id="profile-tag"></span><span id="compatibility-note"></span><span id="home-performance"></span><span id="versions-source"></span><span id="secure-status"></span><span id="auth-status"></span>
+      </div>
+
+      <section class="page" id="page-profiles">
+        <div class="page-intro compact-intro"><div class="eyebrow">GAME CONFIGURATIONS / ISOLATED INSTANCES</div><h1>Your <span>profiles.</span></h1><p>Every Minecraft version and loader has a separate game folder. Mods, saves, settings, resource packs and screenshots stay with that profile.</p></div>
+        <div class="profile-toolbar"><span class="tag profile-count-tag" id="profile-count">0 PROFILES</span><input id="profile-search" type="search" placeholder="⌕   Search profiles…"><select id="profile-sort" aria-label="Sort profiles"><option value="version">Version</option><option value="name">Name</option><option value="created">Date created</option></select><button class="button button-secondary" id="open-create-profile">↑ Add Version</button></div>
+        <div class="profile-grid screenshot-profile-grid" id="profile-list"></div>
+      </section>
+
+      <section class="page" id="page-add-version">
+        <div class="create-page-heading"><div><div class="eyebrow">NEW GAME INSTANCE</div><h1>Create <span>Profile</span></h1><p>Select a Minecraft release and loader. CRYON names the profile from your selection automatically.</p></div><button class="close-page-button" data-page="profiles" aria-label="Close create profile">×</button></div>
+        <div class="create-profile-layout">
+          <section class="version-picker-panel"><div class="eyebrow">MINECRAFT VERSIONS</div><div class="version-card-grid" id="new-version-choices"></div><p class="helper-note">Only official releases returned by Mojang's version manifest are listed here.</p></section>
+          <aside class="create-profile-config">
+            <div class="eyebrow">CREATE PROFILE</div>
+            <label class="field"><span>PROFILE NAME</span><input id="new-profile-name" maxlength="32" placeholder="1.21.1-Fabric"></label>
+            <label class="field"><span>MINECRAFT VERSION</span><select id="new-profile-version"></select></label>
+            <label class="field"><span>MOD LOADER</span><select id="new-profile-loader"><option value="fabric">Fabric</option><option value="vanilla">Vanilla</option><option value="forge">Forge</option><option value="neoforge">NeoForge</option><option value="quilt">Quilt</option></select></label>
+            <label class="field"><span>LOADER BUILD</span><div class="loader-build-row"><input id="new-profile-loader-version" placeholder="Auto-detect on create" autocomplete="off"><button class="small-ghost" type="button" id="resolve-new-loader">Auto</button></div></label>
+            <div class="memory-picker"><div class="setting-slider-line"><label for="new-profile-memory">ALLOCATED MEMORY</label><output id="new-profile-memory-value">3.0 GB</output></div><input id="new-profile-memory" class="range-input" type="range" min="2048" max="16384" step="512" value="3072"><small>3–6 GB is a sensible starting point for most players.</small></div>
+            <div class="profile-path-preview"><span>PROFILE GAME DIRECTORY</span><b id="new-profile-folder-preview">1.21.1-Fabric</b><small>EML root folder name · each version has its own isolated files.</small></div>
+            <button class="button button-primary create-profile-submit" id="create-profile">✧ Create Profile</button>
+          </aside>
+        </div>
+      </section>
+
+      <section class="page" id="page-accounts">
+        <div class="page-intro compact-intro"><div class="eyebrow">IDENTITY / AUTHENTICATION</div><h1>Your <span>accounts.</span></h1><p>Keep Microsoft and local test identities here, then assign an account to each Minecraft profile.</p></div>
+        <div class="account-toolbar"><span class="tag" id="account-count">0 ACCOUNTS</span><input id="account-search" type="search" placeholder="⌕   Search accounts…"><select id="account-sort"><option value="date">Date added</option><option value="name">Name</option></select></div>
+        <div class="account-list screenshot-account-list" id="account-list"></div>
+        <div class="panel profile-account-panel"><div class="panel-heading"><div><div class="eyebrow">PROFILE ACCOUNT LINKING</div><h2>Account assigned to each profile</h2></div><span class="tag">PER PROFILE</span></div><div id="profile-account-assignments" class="profile-account-grid"></div></div>
+      </section>
+
+      <section class="page" id="page-add-account">
+        <div class="create-page-heading"><div><div class="eyebrow">IDENTITY / AUTHENTICATION</div><h1>Add <span>Account</span></h1><p>Choose how you want to sign in to Minecraft.</p></div><button class="close-page-button" data-page="accounts" aria-label="Close add account">×</button></div>
+        <div class="add-account-layout">
+          <div class="auth-method-choices">
+            <button class="auth-method-card selected" id="auth-method-microsoft" type="button"><span class="auth-method-art microsoft-art">▦</span><b>Microsoft Account</b><small>Official Java Edition sign-in</small></button>
+            <button class="auth-method-card" id="auth-method-local" type="button"><span class="auth-method-art local-art">♙</span><b>Local Account</b><small>Offline test identity</small></button>
+          </div>
+          <section class="auth-detail-panel" id="microsoft-auth-panel">
+            <div class="eyebrow">MICROSOFT ACCOUNT</div><h2>Sign in securely</h2><p class="body-copy muted">A secure Microsoft authentication window will open. A valid Minecraft Java Edition licence is required for licensed online play.</p>
+            <div class="auth-info-row"><span>Account storage</span><b id="account-storage-status">Checking…</b></div>
+            <div class="auth-panel-footer"><button class="button button-primary" id="microsoft-login">▦ Sign in with Microsoft</button><small>Don't own Minecraft yet? <a href="https://www.minecraft.net/store/minecraft-java-bedrock-edition-pc" target="_blank" rel="noreferrer">Visit the official Minecraft store ↗</a></small></div>
+          </section>
+          <section class="auth-detail-panel" id="local-auth-panel" hidden>
+            <div class="eyebrow">LOCAL ACCOUNT</div><h2>Create a local identity</h2><p class="body-copy muted">For local testing and servers that explicitly allow offline-mode authentication only.</p>
+            <label class="field"><span>PLAYER USERNAME</span><input id="offline-username" maxlength="16" minlength="3" placeholder="Player_123" autocomplete="off"></label>
+            <div class="auth-panel-footer"><button class="button button-primary" id="offline-login">＋ Create local account</button><small>It does not provide a paid Minecraft licence or premium-server access.</small></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="page" id="page-performance"><div class="page-intro"><div class="eyebrow">FRAME TIME / RESOURCE MANAGEMENT</div><h1>Performance <span>control.</span></h1><p>Choose a sensible baseline, then add compatible optimizations. Results depend on your hardware, game version and mod combination.</p></div><div class="preset-grid" id="preset-grid"><button class="preset-card" data-preset="low"><span class="preset-symbol">▱</span><b>Low-end PC</b><small>Reduced visual load</small></button><button class="preset-card selected" data-preset="balanced"><span class="preset-symbol">◈</span><b>Balanced</b><small>Everyday gameplay</small></button><button class="preset-card" data-preset="high"><span class="preset-symbol">⚡</span><b>High FPS</b><small>Performance focused</small></button><button class="preset-card" data-preset="extreme"><span class="preset-symbol">✧</span><b>Extreme FPS</b><small>Visuals minimized</small></button><button class="preset-card" data-preset="custom"><span class="preset-symbol">⚙</span><b>Custom</b><small>Your own settings</small></button></div><div class="panel"><div class="panel-heading"><div><div class="eyebrow">RECOMMENDED CLIENT OPTIMIZATIONS</div><h2>Compatible mod suggestions</h2></div><span class="tag">MODRINTH CATALOGUE</span></div><div class="optimization-list" id="optimization-list"></div><p class="helper-note">Suggestions are not silently installed. Use Mod Manager to review each mod and its supported loader/version. Sodium and other game-side optimizers require a compatible mod loader.</p><button class="button button-primary" id="save-performance">Save performance profile</button></div></section>
+
+      <section class="page" id="page-mods">
+        <div class="catalog-heading"><div class="catalog-profile-icon">▧</div><div class="catalog-profile-info"><h1 id="catalog-profile-name">CRYON Performance</h1><small id="catalog-profile-meta">Minecraft 1.21.1 · Fabric</small></div><button class="catalog-close" data-page="profiles" aria-label="Back to profiles">×</button></div>
+        <div class="catalog-tabs" role="tablist" aria-label="Modrinth categories">
+          <button class="catalog-tab active" data-mod-type="mod">▣ <span>Mods</span></button>
+          <button class="catalog-tab" data-mod-type="modpack">◇ <span>Modpacks</span></button>
+          <button class="catalog-tab" data-mod-type="resourcepack">▧ <span>Resource Packs</span></button>
+          <button class="catalog-tab" data-mod-type="shader">✧ <span>Shaders</span></button>
+          <button class="catalog-tab" data-mod-type="datapack">▤ <span>Data Packs</span></button>
+        </div>
+        <div class="catalog-toolbar">
+          <div class="catalog-view-tabs"><button class="catalog-view active" data-catalog-view="browse">Browse</button><button class="catalog-view" data-catalog-view="installed">Installed</button></div>
+          <div class="catalog-search-tools"><span class="modrinth-brand">MODRINTH ONLY</span><input id="mod-search-input" type="search" placeholder="Search mods…"><button class="catalog-search-button" id="mod-search-button">Search</button><button class="catalog-refresh" id="refresh-mods" aria-label="Refresh catalogue">⟳</button></div>
+        </div>
+        <div class="catalog-filter-row">
+          <label class="field"><span>Release channel</span><select id="mod-release-channel"><option value="release">Release</option><option value="beta">Beta</option><option value="alpha">Alpha</option><option value="all">All versions</option></select></label>
+          <label class="field"><span>Sort by</span><select id="mod-sort"><option value="downloads">Most downloaded</option><option value="relevance">Relevance</option><option value="updated">Recently updated</option><option value="newest">Newest</option><option value="follows">Most followed</option></select></label>
+          <label class="field datapack-world-field" id="datapack-world-wrapper" hidden><span>Install data pack into world</span><select id="datapack-world-select"><option value="">Choose a saved world…</option></select></label><div class="catalog-category-note"><span id="mod-filter-tag">FABRIC · 1.21.1</span><small id="catalog-category-desc">Popular mods for your selected profile</small></div>
+        </div>
+        <p class="helper-note mod-loader-warning" id="mod-loader-warning" hidden>Mods need Fabric, Forge, NeoForge or Quilt. Choose a modded profile first.</p>
+        <div class="catalog-view-panel" id="catalog-browse-panel"><div class="catalog-results-heading"><div><b id="catalog-results-title">Popular Mods</b><small>Compatible with the active profile</small></div><span class="tag">MODRINTH CATALOGUE</span></div><div class="mod-results catalog-results-grid" id="mod-search-results"><div class="empty-state"><span>⌕</span><b>Loading Modrinth projects…</b></div></div></div>
+        <div class="catalog-view-panel" id="catalog-installed-panel" hidden>
+          <div class="catalog-results-heading"><div><b id="catalog-installed-title">Installed Mods</b><small>Only files belonging to this selected profile</small></div><div class="inline-actions"><button class="small-ghost" id="import-local-mod">Import JAR</button><button class="small-ghost" id="check-mod-updates">Check updates</button><button class="small-ghost" id="backup-mods">Backup</button></div></div>
+          <div id="installed-mods" class="installed-list"><div class="empty-state compact">No items installed in this profile.</div></div>
+          <div class="mod-backup-row"><label class="field"><span>Restore a mod backup</span><select id="mod-backup-select"><option value="">No backups available</option></select></label><button class="button button-secondary" id="restore-mod-backup" disabled>Restore backup</button></div>
+          <div class="mod-update-list" id="mod-update-results" hidden></div>
+        </div>
+      </section>
+
+      <section class="page" id="page-cosmetics">
+        <div class="page-intro skin-page-heading"><div><div class="eyebrow">ACCOUNT / MINECRAFT SKIN</div><h1>Your <span>skin.</span></h1><p>Choose a standard Minecraft PNG skin, preview it, and upload it to the selected Minecraft Java account.</p></div><button class="small-ghost" data-page="accounts">← Back to accounts</button></div>
+        <div class="skin-manager-layout">
+          <section class="panel skin-upload-panel">
+            <div class="panel-heading"><div><div class="eyebrow">SKIN MANAGER</div><h2>Choose a skin</h2></div><span class="tag">64 × 64 PNG</span></div>
+            <div class="skin-file-row">
+              <div class="skin-texture-frame"><img id="skin-selected-preview" alt="Selected Minecraft skin texture preview" hidden><div id="skin-selected-placeholder" class="skin-empty-placeholder"><span>▦</span><b>NO SKIN SELECTED</b><small>Choose a PNG to preview it here.</small></div></div>
+              <div class="skin-file-details"><b id="skin-selected-name">No file selected</b><small id="skin-selected-size">PNG · 64×64 or legacy 64×32</small><button class="button button-secondary" id="skin-choose-button">＋ Choose Skin PNG</button></div>
+            </div>
+            <label class="field skin-variant-field"><span>PLAYER MODEL</span><select id="skin-variant"><option value="classic">Classic · Steve (4px arms)</option><option value="slim">Slim · Alex (3px arms)</option></select></label>
+            <div class="skin-action-row"><button class="button button-primary" id="skin-upload-button" disabled>Upload Skin to Minecraft</button><button class="small-ghost" id="skin-refresh-button">Refresh current skin</button></div>
+            <p class="helper-note" id="skin-upload-hint">Sign in with a Microsoft account that owns Minecraft: Java Edition to upload a skin. Offline accounts can preview PNG files only.</p>
+            <div class="skin-status" id="skin-status" role="status" aria-live="polite">Choose a skin PNG to get started.</div>
+          </section>
+          <section class="panel skin-current-panel">
+            <div class="panel-heading"><div><div class="eyebrow">ACCOUNT SKIN</div><h2>Currently active</h2></div><span class="tag" id="skin-account-state">NOT LOADED</span></div>
+            <div class="skin-current-preview"><img id="skin-current-image" alt="Current Minecraft account skin texture" hidden><div id="skin-current-placeholder" class="skin-empty-placeholder"><span>♙</span><b>NO SKIN LOADED</b><small>Sign in and refresh to view your account skin.</small></div></div>
+            <div class="skin-current-meta"><b id="skin-current-account">No Microsoft account selected</b><small id="skin-current-variant">Current account skin appears here.</small></div>
+          </section>
+        </div>
+      </section>
+
+
+      <section class="page" id="page-servers">
+        <div class="page-intro server-page-intro"><div class="eyebrow">LOCAL HOSTING / MINECRAFT JAVA SERVER</div><h1>Create <span>Server.</span></h1><p>Build, run and administer local Minecraft servers. CRYON monitors Java, process health, CPU/RAM, players, mods or plugins, backups and LAN connectivity.</p></div>
+        <div class="server-workspace">
+          <aside class="panel server-list-panel">
+            <div class="server-list-heading"><div><div class="eyebrow">YOUR SERVERS</div><h2>Local instances</h2></div><button class="button button-primary" id="server-new-button">＋ New</button></div>
+            <div class="server-list" id="server-list"><div class="empty-state compact">Loading local servers…</div></div>
+            <div class="server-storage-note"><span class="status-dot"></span><span>Stored on this PC</span></div>
+          </aside>
+          <div class="server-main-panel">
+            <section class="panel server-empty-state" id="server-empty-state">
+              <div class="server-empty-art">▣</div><div class="eyebrow">CRYON LOCAL SERVER MANAGER</div><h2>Your server space is ready.</h2><p>Create Paper, Purpur, Fabric or Vanilla servers on this PC. Manage runtime, resources, console, plugins/mods, files and backups from one workspace.</p><button class="button button-primary" id="server-empty-create">Create your first server</button>
+            </section>
+            <section class="panel server-create-panel" id="server-create-panel" hidden>
+              <div class="server-panel-heading"><div><div class="eyebrow">NEW LOCAL INSTANCE</div><h2>Create a Minecraft server</h2><p>Choose the server runtime and resource allocation.</p></div><button class="small-ghost" id="server-create-cancel">Cancel</button></div>
+              <div class="server-create-grid">
+                <label class="field"><span>SERVER NAME</span><input id="server-name" maxlength="32" placeholder="My CRYON Server" autocomplete="off"></label>
+                <label class="field"><span>MINECRAFT VERSION</span><select id="server-version" aria-label="Minecraft server version"></select></label>
+                <label class="field"><span>SERVER SOFTWARE</span><select id="server-software"><option value="paper">Paper · Plugins</option><option value="purpur">Purpur · Plugins + tuning</option><option value="vanilla">Vanilla · Official</option><option value="fabric">Fabric · Mods</option></select></label>
+                <label class="field"><span>SERVER PORT</span><input id="server-port" type="number" min="1" max="65535" value="25565"></label>
+                <label class="field"><span>MAX PLAYERS</span><input id="server-max-players" type="number" min="1" max="500" value="20"></label>
+                <label class="field"><span>SERVER MOTD</span><input id="server-motd" maxlength="120" value="CRYON Server" placeholder="Welcome to CRYON"></label>
+                <label class="field"><span>DIFFICULTY</span><select id="server-difficulty"><option value="easy">Easy</option><option value="normal" selected>Normal</option><option value="hard">Hard</option><option value="peaceful">Peaceful</option></select></label>
+                <label class="field"><span>GAME MODE</span><select id="server-gamemode"><option value="survival" selected>Survival</option><option value="creative">Creative</option><option value="adventure">Adventure</option><option value="spectator">Spectator</option></select></label>
+                <label class="field"><span>SERVER OPTIMIZATION</span><select id="server-optimization"><option value="low-resource">Low Resource · 6 / 4 chunks</option><option value="balanced" selected>Balanced · 8 / 6 chunks</option><option value="performance">Performance · 10 / 8 chunks</option><option value="custom">Custom distances</option></select></label>
+                <label class="field"><span>VIEW DISTANCE</span><input id="server-view-distance" type="number" min="2" max="32" value="8"></label>
+                <label class="field"><span>SIMULATION DISTANCE</span><input id="server-simulation-distance" type="number" min="2" max="32" value="6"></label>
+                <label class="field"><span>PLAYER AUTHENTICATION</span><select id="server-online-mode"><option value="true" selected>Online mode · Premium accounts</option><option value="false">Offline mode · Insecure</option></select></label>
+                <div class="server-java-control">
+                  <div class="server-resource-heading"><div><label for="server-java-runtime">JAVA RUNTIME</label><small id="server-java-requirement">Checking Minecraft version requirement…</small></div><button class="small-ghost" id="server-java-install">↓ Install compatible Java</button></div>
+                  <select id="server-java-runtime" aria-label="Server Java runtime"><option value="">Automatic · Choose compatible runtime</option></select>
+                  <small id="server-java-help">Each server can use a different Java installation. CRYON will never force every server onto the newest Java.</small>
+                  <div class="java-install-progress server-java-progress" id="server-java-progress" hidden><div class="progress-track"><div class="progress-fill" id="server-java-progress-fill"></div></div><small id="server-java-progress-label">Preparing Java runtime…</small></div>
+                </div>
+                <div class="server-memory-control">
+                  <div class="server-host-memory-card">
+                    <div><span>HOST MEMORY</span><b id="server-create-host-ram-value">Detecting…</b><small id="server-create-host-ram-sub">Reading installed and available RAM</small></div>
+                    <div class="server-host-memory-track"><i id="server-create-host-ram-meter"></i></div>
+                  </div>
+                  <div class="server-resource-heading"><div><label for="server-memory-mb">RAM ALLOCATION (MB)</label><small>Full installed RAM range · slider and number stay synchronized</small></div><label class="server-memory-number-wrap"><input id="server-memory-mb" type="number" min="512" max="65536" step="1" value="3584" aria-label="RAM allocation in megabytes"><span>MB</span></label></div>
+                  <input id="server-memory" class="server-memory-slider" type="range" min="512" max="8192" step="1" value="3584" aria-label="RAM allocation slider">
+                  <div class="server-memory-range-meta"><span id="server-memory-min-label">512 MB</span><b id="server-memory-installed-label">Detecting installed RAM…</b><span id="server-memory-max-label">— MB</span></div>
+                  <div class="server-memory-recommendation"><output id="server-memory-value">3.5 GB selected</output><small id="server-memory-help">Server creation saves your chosen heap size. CRYON checks free RAM again when you press Start.</small></div>
+                </div>
+              </div>
+              <details class="server-create-advanced">
+                <summary>Advanced world &amp; server settings</summary>
+                <div class="server-advanced-grid">
+                  <label class="field"><span>WORLD SEED (OPTIONAL)</span><input id="server-world-seed" maxlength="64" placeholder="Random world if blank" autocomplete="off"></label>
+                  <label class="field"><span>WORLD TYPE</span><select id="server-world-type"><option value="default">Default</option><option value="flat">Superflat</option><option value="large_biomes">Large Biomes</option><option value="amplified">Amplified</option></select></label>
+                  <label class="field"><span>SPAWN PROTECTION</span><input id="server-spawn-protection" type="number" min="0" max="64" value="16"></label>
+                </div>
+                <div class="server-create-options server-advanced-options">
+                  <label><input id="server-generate-structures" type="checkbox" checked><span>Generate structures</span></label>
+                  <label><input id="server-hardcore" type="checkbox"><span>Hardcore</span></label>
+                  <label><input id="server-allow-nether" type="checkbox" checked><span>Allow Nether</span></label>
+                  <label><input id="server-command-blocks" type="checkbox"><span>Enable command blocks</span></label>
+                </div>
+                <small class="helper-note">These options are written to server.properties. Some settings take effect only after the world is first generated or the server restarts.</small>
+              </details>
+              <div class="server-create-options"><label><input id="server-whitelist" type="checkbox"><span>Enable whitelist</span></label><label><input id="server-pvp" type="checkbox" checked><span>Enable PvP</span></label><label><input id="server-flight" type="checkbox"><span>Allow flight</span></label></div>
+              <div class="server-eula-row"><label><input id="server-eula" type="checkbox"><span>I have read and agree to the <a href="https://aka.ms/MinecraftEULA" target="_blank" rel="noreferrer">Minecraft EULA</a>.</span></label></div>
+              <div class="server-create-progress" id="server-create-progress" hidden><div class="progress-track"><div class="progress-fill" id="server-create-progress-fill"></div></div><small id="server-create-progress-label">Preparing server…</small></div>
+              <div class="server-form-actions"><button class="button button-primary" id="server-create-submit">Download &amp; Create Server</button><small>Server JARs are downloaded from the official software provider. A compatible Java runtime must be installed or selected in Settings → Java Runtime.</small></div>
+            </section>
+            <section class="server-dashboard-panel" id="server-dashboard-panel" hidden>
+              <div class="server-dashboard-heading"><div><div class="eyebrow">SERVER DASHBOARD</div><h2 id="server-selected-name">My Server</h2><div class="server-subline" id="server-selected-meta">Paper · Minecraft 1.21.4 · Port 25565</div></div><span class="server-status-pill offline" id="server-status-pill">● OFFLINE</span></div>
+              <div class="server-operation-banner" id="server-operation-banner" hidden aria-live="polite"><span class="server-operation-spinner" id="server-operation-spinner"></span><div class="server-operation-copy"><b id="server-operation-title">PREPARING…</b><small id="server-operation-subtitle">Preparing Minecraft server…</small></div><button class="button server-operation-stop" id="server-operation-stop" disabled>■ STOP SERVER</button></div>
+              <div class="server-metrics-grid">
+                <div class="panel server-metric-card"><span>HOST CPU</span><b id="server-cpu-value">—</b><small id="server-cpu-model">Detecting processor…</small><div class="server-meter"><i id="server-cpu-meter"></i></div></div>
+                <div class="panel server-metric-card"><span>HOST MEMORY</span><b id="server-ram-value">—</b><small id="server-ram-sub">Detecting memory…</small><div class="server-meter"><i id="server-ram-meter"></i></div></div>
+                <div class="panel server-metric-card"><span>SERVER CPU</span><b id="server-process-cpu-value">—</b><small id="server-process-cpu-sub">Waiting for Java process</small><div class="server-meter"><i id="server-process-cpu-meter"></i></div></div>
+                <div class="panel server-metric-card"><span>SERVER MEMORY</span><b id="server-process-ram-value">—</b><small id="server-process-ram-sub">Actual Java working set</small><div class="server-meter"><i id="server-process-ram-meter"></i></div></div>
+                <div class="panel server-metric-card"><span>JVM HEAP LIMIT</span><b id="server-allocation-value">—</b><small>Configured maximum heap</small><div class="server-meter"><i id="server-allocation-meter"></i></div></div>
+                <div class="panel server-metric-card"><span>PLAYERS ONLINE</span><b id="server-player-value">—</b><small id="server-player-sub">Waiting for server ping</small><div class="server-meter"><i id="server-player-meter"></i></div></div>
+              </div>
+              <div class="server-control-row">
+                <div class="server-primary-controls"><button class="button button-primary server-launch-button" id="server-start-button">▶ LAUNCH SERVER</button><button class="button button-secondary" id="server-stop-button" disabled>■ Stop</button><button class="button button-secondary" id="server-restart-button" disabled>↻ Restart</button></div>
+                <div class="server-secondary-controls"><button class="small-ghost" id="server-open-folder">Open Folder</button><button class="small-ghost danger-ghost" id="server-delete-button">Delete Server</button></div>
+              </div>
+              <div class="server-tabs" role="tablist" aria-label="Server management"><button class="server-tab active" data-server-tab="console">⌘ Console</button><button class="server-tab" data-server-tab="plugins">▦ Plugins</button><button class="server-tab" data-server-tab="mods">◇ Mods</button><button class="server-tab" data-server-tab="files">▤ Files</button><button class="server-tab" data-server-tab="backups">◷ Backups</button><button class="server-tab" data-server-tab="network">⌁ Network</button></div>
+              <section class="server-tab-panel" id="server-tab-console">
+                <div class="server-tab-heading"><div><b>Live Console</b><small>Commands are sent to this server process only.</small></div><button class="small-ghost" id="server-console-clear">Clear</button></div>
+                <pre class="server-console-output" id="server-console-output" aria-live="polite">[CRYON] Select Start to launch this local server.</pre>
+                <div class="server-command-row"><input id="server-command-input" placeholder="Enter a server command… (e.g. help)" autocomplete="off"><button class="button button-primary" id="server-command-send">Send</button></div>
+              </section>
+              <section class="server-tab-panel" id="server-tab-plugins" hidden>
+                <div class="server-tab-heading"><div><b>Plugin Installer</b><small>Search Modrinth plugins compatible with this Minecraft version.</small></div><button class="small-ghost" id="server-plugin-import">Upload .jar</button></div>
+                <div class="server-installed-block"><div class="server-installed-heading">Installed Plugins <span id="server-installed-plugin-count">0</span></div><div class="server-installed-plugins" id="server-installed-plugins"><div class="empty-state compact">No plugins installed.</div></div></div>
+                <div class="server-plugin-search"><input id="server-plugin-query" placeholder="Search plugins…" autocomplete="off"><button class="button button-primary" id="server-plugin-search-button">Search</button></div>
+                <div class="server-plugin-results" id="server-plugin-results"><div class="empty-state compact">Search for a plugin to see compatible projects.</div></div>
+                <p class="helper-note">Only install plugins from sources you trust. Plugin files are placed in the local server's plugins folder; restart the server to load changes.</p>
+              </section>
+              <section class="server-tab-panel" id="server-tab-mods" hidden>
+                <div class="server-tab-heading"><div><b>Fabric Mod Manager</b><small>Find Fabric server mods on Modrinth. Install only mods that are compatible with this Minecraft version.</small></div></div>
+                <div class="server-installed-block"><div class="server-installed-heading">Installed Mods <span id="server-installed-mod-count">0</span></div><div class="server-installed-plugins" id="server-installed-mods"><div class="empty-state compact">No mods installed.</div></div></div>
+                <div class="server-plugin-search"><input id="server-mod-query" placeholder="Search Fabric mods…" autocomplete="off"><button class="button button-primary" id="server-mod-search-button">Search</button></div>
+                <div class="server-plugin-results" id="server-mod-results"><div class="empty-state compact">Select a Fabric server to search for mods.</div></div>
+                <p class="helper-note">A mod can require Fabric API or other dependencies. Review the project page before installing, and restart the server after changing mods.</p>
+              </section>
+              <section class="server-tab-panel" id="server-tab-backups" hidden>
+                <div class="server-tab-heading"><div><b>World &amp; configuration backups</b><small>Local snapshots include worlds, plugins/mods and important server configuration files. Stop the server first.</small></div><button class="button button-primary" id="server-backup-create">＋ Create Backup</button></div>
+                <div class="server-backup-list" id="server-backup-list"><div class="empty-state compact">No backups created yet.</div></div>
+                <p class="helper-note">Backups are uncompressed local snapshots, not cloud copies. Keep another copy on a separate drive for disaster recovery.</p>
+              </section>
+              <section class="server-tab-panel" id="server-tab-network" hidden>
+                <div class="server-tab-heading"><div><b>Connection &amp; network</b><small>Local, LAN and Playit.gg public connection settings for this server.</small></div></div>
+                <div class="server-network-summary"><div><span>LOCALHOST</span><b id="server-localhost-address">127.0.0.1:25565</b></div><div><span>LAN ADDRESS</span><b id="server-lan-address">Detecting…</b></div><div><span>SERVER PORT</span><b id="server-network-port">25565 / TCP</b></div></div>
+                <div class="playit-panel">
+                  <div class="playit-panel-heading"><div><div class="eyebrow">PUBLIC SERVER TUNNEL</div><h3>Playit.gg integration</h3><p id="playit-agent-status">Playit agent is not installed.</p></div><span class="tag">NO PORT FORWARD</span></div>
+                  <div class="playit-actions"><button class="small-ghost" id="playit-download-button">↓ Download agent</button><button class="button button-primary" id="playit-start-button" disabled>▶ Start agent</button><button class="small-ghost" id="playit-stop-button" disabled>■ Stop</button><button class="small-ghost" id="playit-open-dashboard">Open Playit dashboard ↗</button></div>
+                  <div class="playit-progress" id="playit-download-progress" hidden><div class="progress-track"><div class="progress-fill" id="playit-download-progress-fill"></div></div><small id="playit-download-progress-label">Downloading Playit agent…</small></div>
+                  <div class="playit-claim-row" id="playit-claim-row" hidden><span>Agent authorization</span><button class="small-ghost" id="playit-claim-open">Open claim link ↗</button></div>
+                  <label class="field playit-address-field"><span>PUBLIC PLAYIT ADDRESS</span><input id="server-public-address" placeholder="example.joinmc.link or example.joinmc.link:12345" autocomplete="off"></label>
+                  <div class="playit-actions"><button class="button button-secondary" id="server-public-address-save">Save public address</button><button class="small-ghost" id="server-public-address-copy" disabled>Copy address</button></div>
+                  <pre class="playit-agent-output" id="playit-agent-output">[CRYON] Playit agent output will appear here. Download and start the agent, then complete its account claim.</pre>
+                  <p class="helper-note">First launch can show a Playit account-claim link. After authorizing the agent, create a <b>Minecraft Java</b> tunnel in the Playit dashboard and set its local destination to <code>127.0.0.1:<span id="playit-local-port">25565</span></code>. Paste the public hostname shown by Playit above. CRYON does not invent or reserve a public address on your behalf.</p>
+                </div>
+                <p class="helper-note">LAN players use the LAN address. Playit routes external players through its tunnel, avoiding router port-forwarding. Keep online-mode enabled for public servers and never disable your firewall entirely.</p>
+              </section>
+              <section class="server-tab-panel" id="server-tab-files" hidden>
+                <div class="server-tab-heading"><div><b>Server File Manager</b><small>Browse folders, upload files and edit text configurations.</small></div><div class="inline-actions"><button class="small-ghost" id="server-file-upload">Upload File</button><button class="small-ghost" id="server-file-open-folder">Open in Explorer</button></div></div>
+                <div class="server-file-toolbar"><button class="small-ghost" id="server-file-up">↑ Up</button><span id="server-file-current-path">/</span><button class="small-ghost danger-ghost" id="server-file-delete" disabled>Delete selected</button></div>
+                <div class="server-file-list" id="server-file-list"><div class="empty-state compact">Select a server to browse its files.</div></div>
+                <div class="server-file-editor" id="server-file-editor" hidden><div class="server-file-editor-heading"><b id="server-file-editor-name">server.properties</b><div class="inline-actions"><button class="small-ghost" id="server-file-editor-cancel">Close</button><button class="button button-primary" id="server-file-editor-save">Save file</button></div></div><textarea id="server-file-editor-content" spellcheck="false"></textarea></div>
+              </section>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="page-settings">
+        <div class="page-intro"><div class="eyebrow">CRYON CLIENT / ENVIRONMENT</div><h1>Settings <span>& control.</span></h1><p>Launcher behavior, Java runtime, memory, game window and storage locations. Changes are saved locally.</p></div>
+        <div class="settings-section-label">LAUNCHER UPDATES</div>
+        <div class="settings-stack"><div class="settings-row"><span class="settings-row-icon">↻</span><span class="settings-row-copy"><b>Automatic launcher updates</b><small id="launcher-update-status" role="status">Checking update configuration…</small><progress id="launcher-update-progress" max="100" value="0" hidden></progress></span><div class="inline-actions"><button class="small-ghost" id="launcher-update-check">Check for updates</button><button class="button button-primary" id="launcher-update-install" hidden>Restart &amp; update</button></div></div></div>
+        <div class="settings-section-label">GENERAL</div>
+        <div class="settings-stack">
+          <label class="settings-row"><span class="settings-row-icon">↗</span><span class="settings-row-copy"><b>Start when I sign in</b><small>Open CRYON CLIENT automatically when you sign in to Windows.</small></span><input class="switch-input" id="setting-start-on-login" type="checkbox"></label>
+          <label class="settings-row"><span class="settings-row-icon">▣</span><span class="settings-row-copy"><b>Automatically hide launcher</b><small>Hide CRYON CLIENT after Minecraft starts and show it again when the game closes.</small></span><input class="switch-input" id="setting-hide-launcher" type="checkbox"></label>
+          <label class="settings-row"><span class="settings-row-icon">◉</span><span class="settings-row-copy"><b>Hide home player name</b><small>Hide the username label displayed over the home background.</small></span><input class="switch-input" id="setting-hide-character" type="checkbox"></label>
+          <div class="settings-row settings-row-disabled"><span class="settings-row-icon">♟</span><span class="settings-row-copy"><b>Discord Rich Presence <em>Coming soon</em></b><small>Show CRYON CLIENT activity on your Discord profile. Requires a later Discord integration.</small></span><input class="switch-input" type="checkbox" disabled></div>
+        </div>
+        <div class="settings-section-label">PERFORMANCE</div>
+        <div class="settings-two-col">
+          <div class="panel settings-panel">
+            <div class="eyebrow">MEMORY ALLOCATION</div><h2>Default Memory Allocation</h2>
+            <div class="setting-slider-line"><label for="ram-max">Maximum RAM</label><output id="ram-max-value">4096 MB</output></div>
+            <input id="ram-max" class="range-input" type="range" min="1024" max="32768" step="512">
+            <div class="setting-slider-line"><label for="ram-min">Minimum RAM</label><output id="ram-min-value">1024 MB</output></div>
+            <input id="ram-min" class="range-input" type="range" min="512" max="8192" step="256">
+            <p class="helper-note">Leave enough memory for Windows and other applications. More RAM is not automatically faster.</p>
+          </div>
+          <div class="panel settings-panel">
+            <div class="eyebrow">DOWNLOADS</div><h2>Simultaneous Modpack Downloads</h2>
+            <div class="setting-slider-line"><label for="setting-download-concurrency">Parallel files</label><output id="download-concurrency-value">6</output></div>
+            <input id="setting-download-concurrency" class="range-input" type="range" min="1" max="16" step="1">
+            <p class="helper-note">Controls concurrent files while applying Modrinth modpacks. Minecraft runtime downloads are managed by EML Lib.</p>
+          </div>
+        </div>
+        <div class="settings-section-label">JAVA RUNTIME</div>
+        <div class="panel settings-panel java-runtime-panel">
+          <div class="path-setting-row"><div><b>Java installations</b><small id="java-detect-result">Checking installed Java runtimes…</small></div><div class="inline-actions"><button class="small-ghost" id="pick-java">Browse</button><button class="small-ghost" id="detect-java">Refresh</button></div></div>
+          <select id="settings-java-runtime" aria-label="Global Java runtime"><option value="">Automatic · Let Minecraft select the compatible Java version</option></select>
+          <input id="java-path" class="wide-readonly" type="text" placeholder="Automatic Java management" readonly>
+          <div class="java-install-row"><div><b>Managed Java Runtime · Eclipse Temurin JRE</b><small>Downloads the Java major required by the active Minecraft version, verifies its SHA-256 checksum, installs it inside CRYON and can select it automatically.</small></div><button class="button button-primary" id="install-java-21">↓ Install compatible Java</button></div>
+          <div class="java-install-progress" id="java-install-progress" hidden><div class="progress-track"><div class="progress-fill" id="java-install-progress-fill"></div></div><small id="java-install-progress-label">Preparing Java 21…</small></div>
+          <details class="advanced-settings"><summary>Advanced Java Options</summary><label class="field"><span>Custom JVM arguments (one per line or space-separated)</span><textarea id="setting-java-args" rows="4" placeholder="-XX:+UseG1GC&#10;-XX:+UnlockExperimentalVMOptions"></textarea></label><small>Arguments are passed to Java directly. Do not paste shell commands or Minecraft launch arguments here.</small></details>
+        </div>
+        <div class="settings-section-label">GAME WINDOW</div>
+        <div class="settings-stack">
+          <label class="settings-row"><span class="settings-row-icon">▣</span><span class="settings-row-copy"><b>Fullscreen</b><small>Start Minecraft in fullscreen. Applies on the next launch.</small></span><input class="switch-input" id="setting-fullscreen" type="checkbox"></label>
+          <div class="settings-row"><span class="settings-row-icon">↔</span><span class="settings-row-copy"><b>Window Width (px)</b><small>Window width when fullscreen is off.</small></span><input class="small-number" id="setting-window-width" type="number" min="640" max="7680" step="10"></div>
+          <div class="settings-row"><span class="settings-row-icon">↕</span><span class="settings-row-copy"><b>Window Height (px)</b><small>Window height when fullscreen is off.</small></span><input class="small-number" id="setting-window-height" type="number" min="480" max="4320" step="10"></div>
+        </div>
+        <div class="settings-section-label">DIRECTORIES</div>
+        <div class="settings-stack">
+          <div class="settings-row"><span class="settings-row-icon">▣</span><span class="settings-row-copy"><b>Game Data Directory</b><small id="game-directory-label">CRYON CLIENT profile data parent folder</small></span><div class="inline-actions"><button class="small-ghost" id="pick-game-directory">Change</button><button class="small-ghost" id="open-game-directory">Open</button></div></div>
+          <div class="settings-row"><span class="settings-row-icon">▤</span><span class="settings-row-copy"><b>Install Directory</b><small id="install-directory-label">Application installation folder</small></span><button class="small-ghost" id="open-install-directory">Open</button></div>
+          <div class="settings-row"><span class="settings-row-icon">⚙</span><span class="settings-row-copy"><b>Configuration Directory</b><small id="config-directory-label">Application settings, accounts and logs</small></span><button class="small-ghost" id="open-config-directory">Open</button></div>
+          <div class="settings-row"><span class="settings-row-icon">▧</span><span class="settings-row-copy"><b>Active Profile Folder</b><small id="active-profile-directory-label">The selected Minecraft version's isolated files</small></span><button class="small-ghost" id="open-active-profile-folder">Open</button></div>
+          <div class="settings-row"><span class="settings-row-icon">☷</span><span class="settings-row-copy"><b>Launcher Logs</b><small>Open startup, download and Minecraft launch diagnostics.</small></span><button class="small-ghost" id="open-logs-settings">Open</button></div>
+        </div>
+        <div class="settings-save-row"><span id="settings-feedback" class="muted">Changes are saved locally.</span><button class="button button-primary" id="save-settings">Save settings</button></div>
+      </section>
+      <footer class="main-footer"><span>CRYON CLIENT <span class="muted">v0.10.4</span></span><span>Not affiliated with Mojang Studios or Microsoft.</span></footer>
+    </main>
+  </div>
+  <div class="toast-host" id="toast-host" aria-live="polite"></div>
+</body>
+</html>

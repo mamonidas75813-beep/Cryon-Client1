@@ -1,0 +1,4 @@
+> **SignPath preparation update:** The older instructions below describe the legacy approach. For the current proposed public-source workflow, read [SIGNPATH_SETUP.md](SIGNPATH_SETUP.md). The legacy PFX workflow now requires manual dispatch on a matching version tag and explicit opt-in; tag pushes no longer publish automatically. Do not follow the old private-source instructions for Foundation signing.
+
+# Windows signing
+Configure repository Actions secrets CSC_LINK (Base64 PFX) and CSC_KEY_PASSWORD (password). Never commit either. Run Windows Release manually to test, then publish a new version tag. The workflow blocks publication unless both EXEs have valid Authenticode signatures. A trusted signing certificate and timestamping access are required. An unsigned existing installation may need a one-time manual migration; test update compatibility. SmartScreen reputation is not guaranteed.

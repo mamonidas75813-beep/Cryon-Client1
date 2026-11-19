@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "nova_hud",
+  "version": "${version}",
+  "name": "CRYON HUD",
+  "description": "Client-side FPS, coordinates, direction, keystrokes, CPS and utility HUD for CRYON CLIENT.",
+  "environment": "client",
+  "entrypoints": { "client": ["client.nova.hud.NovaHudClient"] },
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}

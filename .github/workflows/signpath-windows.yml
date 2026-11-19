@@ -1,0 +1,108 @@
+name: SignPath Windows candidate
+on:
+  workflow_dispatch:
+    inputs:
+      request_signing:
+        description: 'Submit to SignPath only after Foundation approval and configuration'
+        type: boolean
+        default: false
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: signpath-windows-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  build:
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
+    runs-on: windows-latest
+    timeout-minutes: 45
+    outputs:
+      artifact_id: ${{ steps.unsigned.outputs.artifact-id }}
+      version: ${{ steps.stage.outputs.version }}
+      product_version: ${{ steps.stage.outputs.product_version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Check source and lockfile
+        run: |
+          if (!(Test-Path package-lock.json)) { throw 'Generate and commit package-lock.json first (see SIGNPATH_SETUP.md).' }
+          npm ci --include=dev --no-audit --no-fund
+          if ($LASTEXITCODE -ne 0) { throw 'npm ci failed' }
+          npm run check
+          if ($LASTEXITCODE -ne 0) { throw 'Source check failed' }
+          npm test
+          if ($LASTEXITCODE -ne 0) { throw 'Tests failed' }
+      - name: Build unsigned NSIS candidate
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+        run: |
+          npm run build:installer
+          if ($LASTEXITCODE -ne 0) { throw 'Installer build failed' }
+      - name: Stage exact installer and verify metadata
+        id: stage
+        run: |
+          $version = node -p "require('./package.json').version"
+          if ($version -notmatch '^\d+\.\d+\.\d+$') { throw 'Stable version required' }
+          if ($env:GITHUB_REF -like 'refs/tags/*' -and $env:GITHUB_REF_NAME -ne "v$version") { throw 'Tag/version mismatch' }
+          $name = "CRYON-CLIENT-Setup-$version.exe"
+          $file = Get-Item "build-output/installer/$name" -ErrorAction Stop
+          $info = $file.VersionInfo
+          if ($info.ProductName -cne 'CRYON CLIENT' -or $info.ProductVersion -notin @($version, "$version.0")) { throw 'Unexpected PE product metadata' }
+          if ((Get-AuthenticodeSignature $file.FullName).Status -ne 'NotSigned') { throw 'Expected unsigned input' }
+          New-Item -ItemType Directory -Path signing-input | Out-Null
+          Copy-Item $file.FullName "signing-input/$name"
+          "version=$version" >> $env:GITHUB_OUTPUT
+          "product_version=$($info.ProductVersion)" >> $env:GITHUB_OUTPUT
+      - name: Upload unsigned installer for review
+        id: unsigned
+        uses: actions/upload-artifact@v4
+        with:
+          name: unsigned-installer
+          path: signing-input/*.exe
+          if-no-files-found: error
+  sign:
+    if: inputs.request_signing && startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: windows-latest
+    timeout-minutes: 90
+    environment: signpath-release
+    steps:
+      - name: Submit installer to SignPath for manual approval
+        uses: signpath/github-action-submit-signing-request@v3
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ vars.SIGNPATH_PROJECT_SLUG }}
+          signing-policy-slug: ${{ vars.SIGNPATH_SIGNING_POLICY_SLUG }}
+          artifact-configuration-slug: ${{ vars.SIGNPATH_ARTIFACT_CONFIGURATION_SLUG }}
+          github-artifact-id: ${{ needs.build.outputs.artifact_id }}
+          wait-for-completion: true
+          wait-for-completion-timeout-in-seconds: 4800
+          output-artifact-directory: signed-candidate
+          parameters: |
+            version: "${{ needs.build.outputs.version }}"
+            productVersion: "${{ needs.build.outputs.product_version }}"
+      - name: Verify signed installer and generate checksum
+        env:
+          VERSION: ${{ needs.build.outputs.version }}
+          PRODUCT_VERSION: ${{ needs.build.outputs.product_version }}
+        run: |
+          $name = "CRYON-CLIENT-Setup-$env:VERSION.exe"
+          $files = @(Get-ChildItem signed-candidate -File -Recurse)
+          if ($files.Count -ne 1 -or $files[0].Name -cne $name) { throw 'Unexpected signed artifact contents' }
+          $file = $files[0]
+          $sig = Get-AuthenticodeSignature $file.FullName
+          if ($sig.Status -ne 'Valid' -or $sig.SignerCertificate.GetNameInfo([System.Security.Cryptography.X509Certificates.X509NameType]::SimpleName, $false) -cne 'SignPath Foundation' -or !$sig.TimeStamperCertificate) { throw 'Trusted, timestamped Foundation signature required' }
+          if ($file.VersionInfo.ProductName -cne 'CRYON CLIENT' -or $file.VersionInfo.ProductVersion -cne $env:PRODUCT_VERSION) { throw 'Unexpected signed product metadata' }
+          $hash = (Get-FileHash $file.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  $name" | Set-Content -Encoding ascii (Join-Path $file.DirectoryName 'SHA256SUMS.txt')
+      - uses: actions/upload-artifact@v4
+        with:
+          name: signed-installer-candidate
+          path: signed-candidate/
+          if-no-files-found: error
